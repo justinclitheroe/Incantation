@@ -1,0 +1,72 @@
+#+title: Balatro Manager
+* Functionality
+I hate having to go to some specific folder to run Balatro+Mods, I want to have a binary I can install and run that will
+1. Set up the lua scripting process and the mod loader on first run (with an option to run it again as wanted)
+2. Install mods
+3. Run the game from anywhere
+* Lua Script + Steammodded install
+requirements: Git, <tbd>
+** Lovely files go to:
+- WIN: ~lovely-x86_64-pc-windows-msvc.zip~ -> ~Probably somewhere in steamapps~
+- MAC: ~lovely-aarch64-apple-darwin.tar.gz / lovely-x86_64-apple-darwin.tar.gz~ -> ~$HOME/Applications/Balatro.app/Contents/MacOS~
+** Steammodded
+- Windows: ~cd %AppData%/Balatro;~
+- Mac: ~cd ~/Library/Application Support/Balatro;~
+- Linux (WINE/Proton): ~cd ~/.local/share/Steam/steamapps/compatdata/2379780/pfx/drive_c/users/steamuser/AppData/Roaming/Balatro~
+~mkdir Mods~
+~git clone https://github.com/Steamopollys/Steamodded.git~
+Switch to a different version of Steammodded: ~git fetch --all && git checkout tags/1.x.x -b 1.x.x && git checkout 1.x.x~
+Update Steammodded main: ~git pull~
+* Get mods <CI/CD>
+curl -H 'Accept: application/vnd.github.text-match+json' -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer <TOKEN>" 'https://api.github.com/search/code?page=<page>&per_page=100&q="---+STEAMODDED+HEADER"'
+
+#+begin_src rust
+let page = octocrab::instance()
+    .search()
+    .code("println! language:rust repo:rust-lang/rust")
+    .sort("indexed")
+    .order("asc")
+    .send()
+    .await?;
+#+end_src
+
+Just get everything and store it in a github gist,
+filter based on the word "Example"
+#+begin_src json
+{
+    "name": "",
+    "description": "",
+    "repo": ""
+    "isModpack": false
+}
+#+end_src
+** Problem: Modpacks need to be installed
+after we pull the modlist, as we create the modlist, we can check for the repo already existing and then just clone the repo directly into the Mod directory
+#+begin_src json
+"repo/name": {
+    "name": "--- NAME",
+    "description": "Description of the mod",
+    "repo": "repo/name",
+    "isModpack": true
+}
+#+end_src
+* Get Mods <Client>
+~incantation list~
+GET GIST url then display like
+#+begin_src txt
+--- <NAME> [<FULL REPO>]
+           <Description>
+#+end_src
+* Install Mod
+git clone to $MODDIR
+#+begin_src rust
+use git2::Repository;
+
+let url = "https://github.com/alexcrichton/git2-rs";
+let repo = match Repository::clone(url, "/path/to/a/repo") {
+    Ok(repo) => repo,
+    Err(e) => panic!("failed to clone: {}", e),
+};
+#+end_src
+* Update mod(s)
+git pull all mods
