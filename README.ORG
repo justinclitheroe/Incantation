@@ -1,4 +1,5 @@
 #+title: Balatro Manager
+This readme is currently more of just my notes, check back later for a good install guide
 * Functionality
 I hate having to go to some specific folder to run Balatro+Mods, I want to have a binary I can install and run that will
 1. Set up the lua scripting process and the mod loader on first run (with an option to run it again as wanted)
