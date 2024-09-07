@@ -32,12 +32,14 @@ impl ModList {
             mods: HashMap::new(),
         }
     }
+
     fn get_github_token(&self) -> String {
         /// Pulls in a github token from GITHUBPAT
         std::env::var("GITHUBPAT").unwrap_or_else(|_| {
             panic!("Error reading Github personal Access token (Did you set it to GITHUBPAT?)")
         })
     }
+
     async fn get_pages(&self) -> Vec<Code> {
         /// Helper function for ModList Initialization,
         /// pulls in all files with the STEAMODDED header on GitHub
@@ -65,8 +67,7 @@ impl ModList {
                 .repository
                 .full_name
                 .unwrap_or_else(|| String::from("repo/undefined"));
-            self
-                .mods
+            self.mods
                 .entry(repo_path.clone())
                 .and_modify(|modEntry| modEntry.is_modpack = true)
                 .or_insert(Mod {
@@ -86,7 +87,6 @@ impl ModList {
         writer.flush().unwrap();
     }
 }
-
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
