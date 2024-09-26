@@ -1,5 +1,5 @@
 #+title: Balatro Manager
-This readme is currently more of just my notes, check back later for a good install guide
+This readme is currently more of just my notes, check back later for a good install guide. Expect many .unwraps during the early development process
 * Version updates
 0.1.0 -> Initial commit, procedural structure for modlist population
 0.2.0 -> Refactor from procedural to more object oriented.
